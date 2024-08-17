@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escritura</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            background-color: black;
+        }
+        main{
+            margin: 0 auto;
+            padding: 40px;
+            width: 70vw;
+            max-width: 800px;
+            min-width: 400px;
+            background-color: rgb(175, 205, 244);
+        }
+        #texto{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.2rem;
+            text-align: justify;
+        }
+        #texto span{
+            background-color:rgb(5, 166, 62);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+        #carrera{
+            display: flex;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid blue;
+
+        }
+       #carrera .imagen{        
+        border-bottom: 2px dotted green;
+        flex-grow: 3;
+       }
+       .imagen img{
+        width: 20%;
+       }
+       #escrito{
+        display: flex;
+            width: 80%;
+            height: 1.2em;
+            text-align: center;
+            margin: 5px auto;
+            font-size: 2em;
+       }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="carrera">
+            <div class="usuario">Usuario</div> 
+            <div class="imagen">
+                <img src="https://www.velocidactil.es/images/vehiculos/3_1_1.png" alt="imagen del jugador">
+            </div>
+            <div class="puntuacion">Puntuacion: 0</div>
+        </div>
+
+        <div>
+            <p id="texto">Cargando texto.</p>
+            <input type="text" id="escrito">
+        </div>
+    </main>
+   
+    
+    <script>
+        let letra = 0;
+        let miTexto;
+        const miAudio = new Audio("ding.mp3");
+        async function poesias(){
+            let poesia = await fetch("https://poetrydb.org/author,linecount/Shakespeare;14/lines");
+            miTexto = await poesia.json();
+            aleatorio = Math.floor(Math.random() * 152);
+            miTexto = miTexto[aleatorio].lines;
+            miTexto = miTexto.toString();
+            miTexto = miTexto.replaceAll(",,", ", ");
+            miTexto = miTexto.replaceAll(":,", ": ");
+            $('#texto').text(miTexto);
+            //console.log(poesia2[0].lines);
+
+        }
+       // const miTexto = "Hola, esto es un texto de prueba, para comprobar si funciona bien. Hola, esto es un texto de prueba, para comprobar si funciona bien. ";
+        $('#texto').text(miTexto);
+        let contador = 0;
+
+        $(document).ready(function(){
+            $('#escrito').on("input", escribe);
+
+            poesias();
+        })
+
+
+        function escribe(){
+            const texto = $('#texto').text();
+            escrito = $('#escrito').val();
+            $('.puntuacion').text("Puntuacion: "+letra);
+            
+            margen_izq = parseFloat( $('.imagen').css('width') ) - parseFloat( $('.imagen img').css('width') );
+            margen_izq = (margen_izq / texto.length).toFixed(2);
+
+           if( texto.substring(letra,).startsWith( escrito ) && escrito.length == contador+1){
+                $('#escrito').css("background-color","white");
+                contador+=1;
+                $('#texto').html(miTexto.substring(0,letra)+"<span>"+miTexto.substring(letra,letra + contador) +"</span>"+ miTexto.substring(letra+contador));
+  
+                if(escrito.charAt(escrito.length -1) == " "){
+                    contador=0;
+                    letra += escrito.length;
+                    $('#escrito').val("");
+                    $('.imagen img').css('margin-left', margen_izq*letra+"px");
+                }
+           }else{
+                $('#escrito').css("background-color","pink");
+                miAudio.play();
+           }
+        }
+       
+    </script>
+</body>
+</html>
