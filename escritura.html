@@ -8,6 +8,7 @@
     <style>
         *{
             box-sizing: border-box;
+            user-select: none;
         }
         body{
             background-color: black;
@@ -27,6 +28,7 @@
         }
         #texto span{
             background-color:rgb(5, 166, 62);
+            color: white;
             font-weight: 700;
             text-decoration: underline;
         }
@@ -51,7 +53,10 @@
             text-align: center;
             margin: 5px auto;
             font-size: 2em;
+            word-spacing: normal; 
        }
+
+
     </style>
 </head>
 <body>
@@ -59,7 +64,7 @@
         <div id="carrera">
             <div class="usuario">Usuario</div> 
             <div class="imagen">
-                <img src="https://www.velocidactil.es/images/vehiculos/3_1_1.png" alt="imagen del jugador">
+                <img src="./perry.png" alt="imagen del jugador">
             </div>
             <div class="puntuacion">Puntuacion: 0</div>
         </div>
@@ -102,7 +107,8 @@
             const texto = $('#texto').text();
             escrito = $('#escrito').val();
             $('.puntuacion').text("Puntuacion: "+letra);
-            
+            $('.letraGrande div').addClass("fadeOut");
+
             margen_izq = parseFloat( $('.imagen').css('width') ) - parseFloat( $('.imagen img').css('width') );
             margen_izq = (margen_izq / texto.length).toFixed(2);
 
@@ -110,7 +116,7 @@
                 $('#escrito').css("background-color","white");
                 contador+=1;
                 $('#texto').html(miTexto.substring(0,letra)+"<span>"+miTexto.substring(letra,letra + contador) +"</span>"+ miTexto.substring(letra+contador));
-  
+
                 if(escrito.charAt(escrito.length -1) == " "){
                     contador=0;
                     letra += escrito.length;
@@ -121,6 +127,7 @@
                 $('#escrito').css("background-color","pink");
                 miAudio.play();
            }
+           
         }
        
     </script>
